@@ -1,0 +1,17 @@
+application: mitsuo62matsumoto
+version: 4
+runtime: python27
+api_version: 1
+threadsafe: false
+
+handlers:
+- url: /_ah/mail/.+
+  script: mail.py
+- url: /favicon\.ico
+  static_files: static/images/favicon.ico
+  upload: static/images/favicon\.ico
+- url: /.*
+  script: spreadsheets.py
+
+inbound_services:
+- mail
