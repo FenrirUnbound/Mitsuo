@@ -5,6 +5,7 @@ import logging
 import myUser
 
 def main():
+	names = []
 	user = myUser.User()
 
 	client = gdata.spreadsheet.service.SpreadsheetsService()
@@ -21,13 +22,13 @@ def main():
 	worksheet = id_parts[len(id_parts) - 1]
 
 	# Get cell data
-	maxRows = wsFeed.entry[0].row_count.text
 	feed = client.GetCellsFeed(spreadsheet, worksheet)
 
 	for entry in feed.entry:
 		# Only pull data from the 'Name' column ('A' column)
 		if entry.title.text[0] == 'A':
-			logging.info(entry.content.text.strip()
+			names.append(entry.content.text.strip())
+
 
 if __name__ == "__main__":
 	main()
