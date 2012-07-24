@@ -4,27 +4,30 @@ import gdata.spreadsheet.service
 import logging
 import myUser
 
-user = myUser.User()
+def main():
+	user = myUser.User()
 
-client = gdata.spreadsheet.service.SpreadsheetsService()
-client.ClientLogin(user.email, user.ticket)
+	client = gdata.spreadsheet.service.SpreadsheetsService()
+	client.ClientLogin(user.email, user.ticket)
 
-# Spreadsheets
-feed = client.GetSpreadsheetsFeed()
-id_parts = feed.entry[0].id.text.split('/')
-spreadsheet = id_parts[len(id_parts) - 1]
+	# Spreadsheets
+	feed = client.GetSpreadsheetsFeed()
+	id_parts = feed.entry[0].id.text.split('/')
+	spreadsheet = id_parts[len(id_parts) - 1]
 
-# Worksheets within the Spreadsheet
-feed = client.GetWorksheetsFeed(spreadsheet)
-id_parts = feed.entry[0].id.text.split('/')
-worksheet = id_parts[len(id_parts) - 1]
+	# Worksheets within the Spreadsheet
+	wsFeed = client.GetWorksheetsFeed(spreadsheet)
+	id_parts = wsFeed.entry[0].id.text.split('/')
+	worksheet = id_parts[len(id_parts) - 1]
 
-# Get cell data
+	# Get cell data
+	maxRows = wsFeed.entry[0].row_count.text
+	feed = client.GetCellsFeed(spreadsheet, worksheet)
 
-# This works, but has a lot of pieces to parse through
-#feed = client.GetCellsFeed(spreadsheet, worksheet)
-#logging.info(feed)
+	for entry in feed.entry:
+		# Only pull data from the 'Name' column ('A' column)
+		if entry.title.text[0] == 'A':
+			logging.info(entry.content.text.strip()
 
-# This breaks when coming across an empty row
-feed = client.GetListFeed(spreadsheet, worksheet)
-logging.info(feed)
+if __name__ == "__main__":
+	main()
