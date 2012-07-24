@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 import logging, email
 from google.appengine.api import mail
 from google.appengine.ext import webapp 
