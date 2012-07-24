@@ -28,10 +28,6 @@ class ReceiveMail(InboundMailHandler):
 				# Reset start pointer to look through rest of email
 				start = decoded.find("Obituary-Deceased Name", end)
 
-		for item in names:
-			logging.info("Name: %s" % item)
-
-
 	def ping(self, message):
 		message_ping = mail.EmailMessage(sender="Arbiter <arbiter@mitsuo62matsumoto.appspotmail.com>",
 										subject="Notification")
