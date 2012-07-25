@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+from directory import Directory
 import gdata.spreadsheet.service
 import logging
 import myUser
@@ -24,11 +25,19 @@ def main():
 	# Get cell data
 	feed = client.GetCellsFeed(spreadsheet, worksheet)
 
+	directory = Directory()
+
 	for entry in feed.entry:
 		# Only pull data from the 'Name' column ('A' column)
 		if entry.title.text[0] == 'A':
-			names.append(entry.content.text.strip())
-
+			person = entry.content.text.strip()
+			directory.add(person)
+"""
+	if 'Darren Matsumoto' in names:
+		logging.info("Found Darren")
+	else:
+		logging.info("Darren not found")
+"""
 
 if __name__ == "__main__":
 	main()
