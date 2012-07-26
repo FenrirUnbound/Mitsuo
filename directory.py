@@ -1,5 +1,3 @@
-#! /usr/bin/env python
-
 class Directory:
 
     def __init__(self):
@@ -37,11 +35,11 @@ class Directory:
             first_name = name_parts[0].lower()
             last_name = name_parts[len(name_parts) - 1].lower()
 
+            # Find the name within the directory
             if last_name in self.directory:
                 return first_name in self.directory[last_name]
 
         return False
-
 
     def get_directory(self):
         return self.directory
