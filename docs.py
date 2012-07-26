@@ -1,8 +1,8 @@
 import gdata.docs.service
 import logging
-import myUser
+import my_user
 
-user = myUser.User()
+user = my_user.User()
 
 client = gdata.docs.service.DocsService()
 client.ClientLogin(user.email, user.ticket)

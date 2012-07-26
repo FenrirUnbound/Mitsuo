@@ -3,11 +3,13 @@
 from directory import Directory
 import gdata.spreadsheet.service
 import logging
-import myUser
+
+import my_user
+
 
 def main():
     names = []
-    user = myUser.User()
+    user = my_user.User()
 
     client = gdata.spreadsheet.service.SpreadsheetsService()
     client.ClientLogin(user.email, user.ticket)
@@ -31,6 +33,7 @@ def main():
         if entry.title.text[0] == 'A':
             person = entry.content.text.strip()
             directory.add(person)
+
 
 if __name__ == "__main__":
     main()
