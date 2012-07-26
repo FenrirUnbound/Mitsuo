@@ -8,41 +8,41 @@ class Directory:
     """
     """
     def add(self, name):
-        nameParts = name.split(' ')
-        if len(nameParts) < 2:
+        name_parts = name.split(' ')
+        if len(name_parts) < 2:
             return False
 		
-        lastName = nameParts[len(nameParts) - 1].lower()
+        last_name = name_parts[len(name_parts) - 1].lower()
 		
         # First occurrance of family name
-        if lastName not in self.directory:
-            self.directory[lastName] = []
+        if last_name not in self.directory:
+            self.directory[last_name] = []
 
-        firstName = nameParts[0].lower()
+        first_name = name_parts[0].lower()
         # Add first name to family
-        self.directory[lastName].append(firstName)
+        self.directory[last_name].append(first_name)
 		
         return True
 
     """
     """
     def contains(self, name):
-        nameParts = name.split(' ')
+        name_parts = name.split(' ')
 		
         # Only given the family name
-        if len(nameParts) == 1:
-            return nameParts[0] in self.directory
+        if len(name_parts) == 1:
+            return name_parts[0] in self.directory
         # Given first and last name
-        elif len(nameParts) >= 2:
-            firstName = nameParts[0].lower()
-            lastName = nameParts[len(nameParts) - 1].lower()
+        elif len(name_parts) >= 2:
+            first_name = name_parts[0].lower()
+            last_name = name_parts[len(name_parts) - 1].lower()
 
-            if lastName in self.directory:
-                return firstName in self.directory[lastName]
+            if last_name in self.directory:
+                return first_name in self.directory[last_name]
 
         return False
 
 
-    def getDirectory(self):
+    def get_directory(self):
         return self.directory
 		
