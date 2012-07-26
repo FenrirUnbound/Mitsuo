@@ -1,8 +1,8 @@
 import gdata.docs.service
 import logging
-import myUser
+import my_user
 
-user = myUser.User()
+user = my_user.User()
 
 client = gdata.docs.service.DocsService()
 client.ClientLogin(user.email, user.ticket)
@@ -10,4 +10,4 @@ client.ClientLogin(user.email, user.ticket)
 documents_feed = client.GetDocumentListFeed()
 
 for document_entry in documents_feed.entry:
-	logging.info("Document: %s" % document_entry.title.text)
+    logging.info("Document: %s" % document_entry.title.text)
