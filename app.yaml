@@ -11,7 +11,7 @@ handlers:
   static_files: static/images/favicon.ico
   upload: static/images/favicon\.ico
 - url: /.*
-  script: spreadsheets.py
+  script: ./models/spreadsheets.py
 
 inbound_services:
 - mail

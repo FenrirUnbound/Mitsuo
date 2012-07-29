@@ -3,13 +3,12 @@
 from directory import Directory
 import gdata.spreadsheet.service
 import logging
-
-import my_user
+from models.my_user import User
 
 
 def main():
     names = []
-    user = my_user.User()
+    user = User()
 
     client = gdata.spreadsheet.service.SpreadsheetsService()
     client.ClientLogin(user.email, user.ticket)
