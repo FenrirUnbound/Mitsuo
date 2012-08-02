@@ -1,9 +1,11 @@
 #! /usr/bin/env python
 
-from directory import Directory
-import gdata.spreadsheet.service
 import logging
-from models.my_user import User
+
+import gdata.spreadsheet.service
+
+from lib.directory import Directory
+from lib.my_user import User
 
 
 def main():

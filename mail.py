@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 
-import logging, email
+import email
+import logging
+
 from google.appengine.api import mail
 from google.appengine.ext import webapp 
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler 
