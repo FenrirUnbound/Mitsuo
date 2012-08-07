@@ -7,6 +7,10 @@ import gdata.spreadsheet.service
 from lib.directory import Directory
 from lib.my_user import User
 
+class Spreadsheets:
+
+    def __init__(self):
+
 
 def main():
     names = []
