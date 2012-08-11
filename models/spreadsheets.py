@@ -6,13 +6,15 @@ import gdata.spreadsheet.service
 
 from lib.directory import Directory
 from lib.my_user import User
-
-class Spreadsheets:
-
-    def __init__(self):
-
+from models.drive import Drive
 
 def main():
+    drive = Drive()
+    
+    spreadsheets = drive.spreadsheets()
+    worksheets = drive.worksheets('Matsumoto Family Directory')
+
+def normal():
     names = []
     user = User()
 
@@ -21,6 +23,9 @@ def main():
 
     # Spreadsheets
     feed = client.GetSpreadsheetsFeed()
+    
+    logging.info(feed)
+    
     id_parts = feed.entry[0].id.text.split('/')
     spreadsheet = id_parts[len(id_parts) - 1]
 
