@@ -7,41 +7,69 @@ from lib.my_user import User
 
 
 class Drive:
+    """
+    """
 
     def __init__(self):
-        self.__user = User()
-        self.__client = gdata.spreadsheet.service.SpreadsheetsService()
+        """
+        """
+        
+        self._user = User()
+        self._client = gdata.spreadsheet.service.SpreadsheetsService()
 
-        self.__client.ClientLogin(self.__user.email, self.__user.ticket)
+        self._client.ClientLogin(self._user.email, self._user.ticket)
 
-    def spreadsheets(self):
+    def list_spreadsheets(self):
+        """
+        """
         result = []
-        feed = self.__client.GetSpreadsheetsFeed()
+        feed = self._client.GetSpreadsheetsFeed()
+        
+        return self._feed_content(feed)
+
+    def list_worksheets(self, spreadsheet):
+        """
+        """
+        index = -1
+
+        spreadsheets_feed = self._client.GetSpreadsheetsFeed()
+        equalized_string = self._equalize_string(spreadsheet)
+        for element in self._feed_content(spreadsheets_feed):
+            ++index
+
+            # Found the requested spreadsheet
+            if equalized_string == self._equalize_string(element):
+                # Grab the ID
+                id_parts = spreadsheets_feed.entry[index].id.text.split('/')
+                id_ = id_parts[len(id_parts) - 1]
+
+                worksheets_feed = self._client.GetWorksheetsFeed(id_)
+                
+                return self._feed_content(worksheets_feed)
+
+        return []
+
+    def _equalize_array(self, string_array):
+        """
+        """
+        result = []
+
+        for element in string_array:
+            result.append(self._equalize_string(element))
+
+        return result
+
+    def _equalize_string(self, string):
+        """
+        """
+        return string.lower().replace(' ', '')
+
+    def _feed_content(self, feed):
+        """
+        """
+        result = []
         
         for item in feed.entry:
             result.append(item.content.text)
         
         return result
-
-    def worksheets(self, spreadsheet):
-        spreadsheets_feed = self.spreadsheets()
-        index = -1
-
-        spreadsheets_feed = self.__equalize_array(spreadsheets_feed)
-        for element in spreadsheets_feed:
-            ++index
-            element = self.__equalize_string(element)
-
-            if self.__equalize_string(spreadsheet) == element:
-                worksheets_feed = 
-
-    def __equalize_array(self, string_array):
-        result = []
-
-        for element in string_array:
-            result.append(self.__equalize_string(element))
-
-        return result
-
-    def __equalize_string(self, string):
-        return string.lower().replace(' ', '')

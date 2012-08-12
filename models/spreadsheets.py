@@ -11,8 +11,11 @@ from models.drive import Drive
 def main():
     drive = Drive()
     
-    spreadsheets = drive.spreadsheets()
-    worksheets = drive.worksheets('Matsumoto Family Directory')
+    spreadsheets = drive.list_spreadsheets()
+    logging.info(spreadsheets)
+    
+    worksheets = drive.list_worksheets('Matsumoto Family Directory')
+    logging.info(worksheets)
 
 def normal():
     names = []
