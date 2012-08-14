@@ -20,15 +20,16 @@ class ReceiveMail(InboundMailHandler):
 
     def _parse_for_names(self, message):
         """Parse an email's body for the names of people
+
         """
         htmltext = message.bodies('text/html')
         result = []
-        
+
         for content_type, body in htmltext:
             decoded = body.decode()
             # Obtain index of tag with this label
             start = decoded.find("Obituary-Deceased Name")
-            
+
             while start > 0:
                 # index of closing-tag
                 index = decoded.find('>', start) + 1
@@ -43,7 +44,7 @@ class ReceiveMail(InboundMailHandler):
                 start = decoded.find("Obituary-Deceased Name", end)
 
     def _ping(self, message):
-        """
+        """Sends an email
         """
         message_ping = mail.EmailMessage(
                 sender="Arbiter <arbiter@mitsuo62matsumoto.appspotmail.com>",
