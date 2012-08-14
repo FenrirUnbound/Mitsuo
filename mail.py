@@ -9,28 +9,42 @@ from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 class ReceiveMail(InboundMailHandler):
+    """
+    """
+
     def receive(self, message):
+        """Event that is fired upon receiving an email
+
+        """
+        names = self._parse_for_names(message)
+
+    def _parse_for_names(self, message):
+        """Parse an email's body for the names of people
+        """
         htmltext = message.bodies('text/html')
-        names = []	# list of names accumulated
-
+        result = []
+        
         for content_type, body in htmltext:
-            decoded = body.decode()	#url-decoded email message
-            start = decoded.find("Obituary-Deceased Name")	# index of tag with this label
-
+            decoded = body.decode()
+            # Obtain index of tag with this label
+            start = decoded.find("Obituary-Deceased Name")
+            
             while start > 0:
-                # index of closing tag
-                index = decoded.find(">", start) + 1
-                # index of next opening tag
-                end = decoded.find("<", start)
-
+                # index of closing-tag
+                index = decoded.find('>', start) + 1
+                # index of next opening-tag
+                end = decoded.find('<', start)
+                
                 # Grab the person's name
                 item = decoded[index:end]
-                names.append(item)
-
+                result.append(item)
+                
                 # Reset start pointer to look through rest of email
                 start = decoded.find("Obituary-Deceased Name", end)
 
-    def ping(self, message):
+    def _ping(self, message):
+        """
+        """
         message_ping = mail.EmailMessage(
                 sender="Arbiter <arbiter@mitsuo62matsumoto.appspotmail.com>",
                 subject="Notification")
