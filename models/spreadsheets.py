@@ -9,15 +9,6 @@ from lib.my_user import User
 from models.drive import Drive
 
 def main():
-    drive = Drive()
-    
-    spreadsheets = drive.list_spreadsheets()
-    logging.info(spreadsheets)
-    
-    worksheets = drive.list_worksheets('Matsumoto Family Directory')
-    logging.info(worksheets)
-
-def normal():
     names = []
     user = User()
 
@@ -46,7 +37,6 @@ def normal():
         if entry.title.text[0] == 'A':
             person = entry.content.text.strip()
             directory.add(person)
-
 
 if __name__ == "__main__":
     main()
