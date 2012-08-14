@@ -5,7 +5,6 @@ import logging
 import gdata.spreadsheet.service
 from lib.my_user import User
 
-
 class Drive:
     """A wrapper class for the GDocs Python Client.
     
@@ -34,6 +33,10 @@ class Drive:
     def get_data(self, spreadsheet, worksheet):
         """Obtain all the cell data within a spreadsheet
         
+        TODO: 1. Add bias to dict structure
+                * Right now it favors columns
+                * Add bias for favoring either columns or rows
+        
         """
         result = {}
 
@@ -58,8 +61,11 @@ class Drive:
 
         id_parts = worksheets_feed.entry[index].id.text.split('/')
         worksheet_id = id_parts[len(id_parts) - 1]
-        
+
         cells_feed = self._client.GetCellsFeed(spreadsheet_id, worksheet_id)
+        
+        # Format the cell data into the dictionary
+        
         return cells_feed
 
         return result
