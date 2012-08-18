@@ -3,9 +3,9 @@ class Directory:
     def __init__(self):
         self.directory = {}
 
-    """
-    """
     def add(self, name):
+        """
+        """
         name_parts = name.split(' ')
         if len(name_parts) < 2:
             return False
@@ -22,9 +22,18 @@ class Directory:
 		
         return True
 
-    """
-    """
+    def adds(self, name_list):
+        """
+        """
+        for name in name_list:
+            result = self.add(name)
+            
+            if(result == False):
+                return False
+
     def contains(self, name):
+        """
+        """
         name_parts = name.split(' ')
 		
         # Only given the family name
