@@ -7,6 +7,8 @@ from google.appengine.api import mail
 from google.appengine.ext import webapp 
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler 
 from google.appengine.ext.webapp.util import run_wsgi_app
+from lib.directory import Directory
+from models.drive import Drive
 
 class ReceiveMail(InboundMailHandler):
     """
@@ -17,6 +19,24 @@ class ReceiveMail(InboundMailHandler):
 
         """
         names = self._parse_for_names(message)
+        directory = self._load_directory()
+
+    def _load_directory(self):
+        """
+        """
+        _spreadsheet = "Matsumoto Family Directory"
+        _worksheet = "Current"
+        
+        directory = Directory()
+        drive = Drive()
+        
+        data = drive.get_data(_spreadsheet, _worksheet)
+        name_list = data[1][1:]
+        
+        directory.adds(name_list)
+        
+        return directory
+        
 
     def _parse_for_names(self, message):
         """Parse an email's body for the names of people
@@ -42,6 +62,9 @@ class ReceiveMail(InboundMailHandler):
                 
                 # Reset start pointer to look through rest of email
                 start = decoded.find("Obituary-Deceased Name", end)
+
+        return result
+
 
     def _ping(self, message):
         """Sends an email
