@@ -1,46 +1,104 @@
 #! /usr/bin/env python
 
-import logging, email
+import email
+import logging
+
 from google.appengine.api import mail
 from google.appengine.ext import webapp 
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler 
 from google.appengine.ext.webapp.util import run_wsgi_app
+from lib.directory import Directory
+from models.drive import Drive
 
 class ReceiveMail(InboundMailHandler):
+    """
+    """
+
     def receive(self, message):
+        """Event that is fired upon receiving an email
+
+        """
+        names = self._parse_for_names(message)
+        directory = self._load_directory()
+        notify_list = []
+        
+        for person in names:
+            logging.info('Checking:  ' + person)
+
+            # for testing purposes
+            #if(directory.contains(person) == True):
+            notify_list.append(person)
+
+        if(len(notify_list) > 0):
+            self._ping(notify_list)
+                
+
+    def _load_directory(self):
+        """
+        """
+        _spreadsheet = "Matsumoto Family Directory"
+        _worksheet = "Current"
+        
+        directory = Directory()
+        drive = Drive()
+        
+        data = drive.get_data(_spreadsheet, _worksheet)
+        name_list = data[1][1:]
+        
+        directory.adds(name_list)
+        
+        return directory
+        
+
+    def _parse_for_names(self, message):
+        """Parse an email's body for the names of people
+
+        """
         htmltext = message.bodies('text/html')
-        names = []	# list of names accumulated
+        result = []
 
         for content_type, body in htmltext:
-            decoded = body.decode()	#url-decoded email message
-            start = decoded.find("Obituary-Deceased Name")	# index of tag with this label
+            decoded = body.decode()
+            # Obtain index of tag with this label
+            start = decoded.find("Obituary-Deceased Name")
 
             while start > 0:
-                # index of closing tag
-                index = decoded.find(">", start) + 1
-                # index of next opening tag
-                end = decoded.find("<", start)
-
+                # index of closing-tag
+                index = decoded.find('>', start) + 1
+                # index of next opening-tag
+                end = decoded.find('<', start)
+                
                 # Grab the person's name
                 item = decoded[index:end]
-                names.append(item)
-
+                result.append(item)
+                
                 # Reset start pointer to look through rest of email
                 start = decoded.find("Obituary-Deceased Name", end)
 
-    def ping(self, message):
+        return result
+
+
+    def _ping(self, names):
+        """Sends an email
+        """
+        obituary = ''
+        for person in names:
+            obituary += person + '\n'
+        
         message_ping = mail.EmailMessage(
-                sender="Arbiter <arbiter@mitsuo62matsumoto.appspotmail.com>",
-                subject="Notification")
+                sender='Arbiter <arbiter@mitsuo62matsumoto.appspotmail.com>',
+                subject='Obituary Notification')
 
-        message_ping.to = "Reclaimer <matsumoto.fambam@gmail.com>"
+        message_ping.to = 'Reclaimer <darren.matsumoto@gmail.com>'
         message_ping.body = """
-Reclaimer,
+                            Reclaimer,
 
-This is a notification of receiving a message.
+                            This is a notification for the following persons:
 
--- Arbiter
-"""
+                            """ + obituary + """
+
+                            -- Arbiter
+                            """
 
         message_ping.send()
 

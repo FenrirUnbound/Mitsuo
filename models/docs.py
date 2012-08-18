@@ -1,5 +1,7 @@
-import gdata.docs.service
 import logging
+
+import gdata.docs.service
+
 import my_user
 
 user = my_user.User()
