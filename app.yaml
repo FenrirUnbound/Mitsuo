@@ -10,10 +10,6 @@ handlers:
 - url: /favicon\.ico
   static_files: static/images/favicon.ico
   upload: static/images/favicon\.ico
-- url: /spreadsheeets*
-  script: ./models/spreadsheets.py
-- url: /.*
-  script: ./test.py
 
 inbound_services:
 - mail
