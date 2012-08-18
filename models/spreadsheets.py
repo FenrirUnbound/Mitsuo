@@ -1,21 +1,25 @@
 #! /usr/bin/env python
 
-from directory import Directory
-import gdata.spreadsheet.service
 import logging
 
-import my_user
+import gdata.spreadsheet.service
 
+from lib.directory import Directory
+from lib.my_user import User
+from models.drive import Drive
 
 def main():
     names = []
-    user = my_user.User()
+    user = User()
 
     client = gdata.spreadsheet.service.SpreadsheetsService()
     client.ClientLogin(user.email, user.ticket)
 
     # Spreadsheets
     feed = client.GetSpreadsheetsFeed()
+    
+    logging.info(feed)
+    
     id_parts = feed.entry[0].id.text.split('/')
     spreadsheet = id_parts[len(id_parts) - 1]
 
@@ -33,7 +37,6 @@ def main():
         if entry.title.text[0] == 'A':
             person = entry.content.text.strip()
             directory.add(person)
-
 
 if __name__ == "__main__":
     main()
