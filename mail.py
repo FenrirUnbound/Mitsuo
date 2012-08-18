@@ -20,6 +20,18 @@ class ReceiveMail(InboundMailHandler):
         """
         names = self._parse_for_names(message)
         directory = self._load_directory()
+        notify_list = []
+        
+        for person in names:
+            logging.info('Checking:  ' + person)
+
+            # for testing purposes
+            #if(directory.contains(person) == True):
+            notify_list.append(person)
+
+        if(len(notify_list) > 0):
+            self._ping(notify_list)
+                
 
     def _load_directory(self):
         """
@@ -66,21 +78,27 @@ class ReceiveMail(InboundMailHandler):
         return result
 
 
-    def _ping(self, message):
+    def _ping(self, names):
         """Sends an email
         """
+        obituary = ''
+        for person in names:
+            obituary += person + '\n'
+        
         message_ping = mail.EmailMessage(
-                sender="Arbiter <arbiter@mitsuo62matsumoto.appspotmail.com>",
-                subject="Notification")
+                sender='Arbiter <arbiter@mitsuo62matsumoto.appspotmail.com>',
+                subject='Obituary Notification')
 
-        message_ping.to = "Reclaimer <matsumoto.fambam@gmail.com>"
+        message_ping.to = 'Reclaimer <darren.matsumoto@gmail.com>'
         message_ping.body = """
-Reclaimer,
+                            Reclaimer,
 
-This is a notification of receiving a message.
+                            This is a notification for the following persons:
 
--- Arbiter
-"""
+                            """ + obituary + """
+
+                            -- Arbiter
+                            """
 
         message_ping.send()
 
