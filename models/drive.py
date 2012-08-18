@@ -27,9 +27,6 @@ class Drive:
         """
         self._user = User()
         self._client = gdata.spreadsheet.service.SpreadsheetsService()
-        self._cell_cache = {'title': '', 'data': {}}
-        self._spreadsheet_cache = {'title': '', 'data': []}
-        self._worksheet_cache = {'title': '', 'data': []}
 
         self._client.ClientLogin(self._user.email, self._user.ticket)
 
