@@ -30,7 +30,7 @@ class Drive:
 
         self._client.ClientLogin(self._user.email, self._user.ticket)
 
-    def get_data(self, spreadsheet, worksheet):
+    def list_cells(self, spreadsheet, worksheet):
         """Obtain all the cell data within a spreadsheet
         
         TODO: 1. Add bias to dict structure
@@ -65,8 +65,19 @@ class Drive:
         cells_feed = self._client.GetCellsFeed(spreadsheet_id, worksheet_id)
         
         # Format the cell data into the dictionary
-        
-        return cells_feed
+        for cell in cells_feed.entry:
+            id_parts = cell.id.text.split('/')
+            id_ = id_parts[len(id_parts) - 1]
+
+            col_index = id_.index('C') + 1
+            col = int(id_[col_index:])
+            
+            # Create entry for the column if it's the first one encountered
+            if(result.has_key(col) == False):
+                result[col] = []
+
+            # 0-index is always 'R', so ignore
+            result[col].append(id_[1:col_index-1])
 
         return result
 
