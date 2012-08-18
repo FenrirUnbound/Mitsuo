@@ -27,10 +27,13 @@ class Drive:
         """
         self._user = User()
         self._client = gdata.spreadsheet.service.SpreadsheetsService()
+        self._cell_cache = {'title': '', 'data': {}}
+        self._spreadsheet_cache = {'title': '', 'data': []}
+        self._worksheet_cache = {'title': '', 'data': []}
 
         self._client.ClientLogin(self._user.email, self._user.ticket)
 
-    def list_cells(self, spreadsheet, worksheet):
+    def get_data(self, spreadsheet, worksheet):
         """Obtain all the cell data within a spreadsheet
         
         TODO: 1. Add bias to dict structure
@@ -76,8 +79,8 @@ class Drive:
             if(result.has_key(col) == False):
                 result[col] = []
 
-            # 0-index is always 'R', so ignore
-            result[col].append(id_[1:col_index-1])
+            # TODO: Improve this to accomodate for blank entries
+            result[col].append(cell.content.text.strip())
 
         return result
 

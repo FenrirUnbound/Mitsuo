@@ -11,7 +11,7 @@ def main():
     
     worksheets = drive.list_worksheets('Matsumoto Family Directory')
     
-    cells = drive.list_cells('Matsumoto Family Directory', 'Current')
+    cells = drive.get_data('Matsumoto Family Directory', 'Current')
     logging.info(cells)
 
 if __name__ == "__main__":
